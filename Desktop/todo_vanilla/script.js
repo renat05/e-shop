@@ -9,17 +9,19 @@ let message = document.querySelector('.message'),
         displayMessages();
     }
     btn.addEventListener('click', function() {
-        let todo = {
+        if(!message.value) return
+         let todo = {
             todo: message.value,
             checked: false,
             important: false
         }
         todoList.push(todo)
         localStorage.setItem('todoList', JSON.stringify(todoList))
+        message.value = ''
     })
 
     function displayMessages ()  {
-        let displayMessage = ''
+        let displayMessage = '';
         todoList.forEach(function (item, i)  {
             displayMessage += `
             <li>
@@ -30,3 +32,15 @@ let message = document.querySelector('.message'),
             todo.innerHTML = displayMessage;
         })
     }
+    todo.addEventListener('change', (e) => {
+        let idInput = e.target.getAttribute('id').replace('item_', ''); // Получаем индекс элемента из ID
+        let label = document.querySelector(`label[for='item_${idInput}']`); // Находим соответствующую метку
+        let valueLabel = label.textContent; // Получаем текстовое содержимое метки
+    
+        // Обновляем свойство checked в массиве todoList
+        todoList[idInput].checked = e.target.checked;
+    
+        // Сохраняем обновленный список задач в localStorage
+        localStorage.setItem('todoList', JSON.stringify(todoList));
+    });
+    
